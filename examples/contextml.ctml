@@ -1,0 +1,77 @@
+# contextml: Full Example Configuration
+
+project:
+  name: "My Awesome Project"          # Mandatory: Name of the project
+  version: "1.0.0"                    # Mandatory: Specification version
+  context_strategy:
+    max_files: 7                       # Maximum number of files in prompt (default: 7)
+    priority: ["critical", "depends_on"]  # Prioritization strategy
+
+  dependencies:                       # External dependencies
+    python: "3.10"                    # Python version requirement
+    nodejs: "18.17"                   # Node.js version requirement
+    libraries:                        # Specific library dependencies
+      - name: "requests"              # Library name
+        version: "2.28.1"             # Library version
+        stability: "prod"             # Stability level: prod/test/dev
+        update_policy: "minor"        # Update policy: patch/minor/major/none
+
+  global:                             # Global settings
+    encoding: "utf-8"                 # File encoding
+    line_endings: "unix"              # Line ending convention
+
+files:
+  - path: "src/app.py"               # Absolute path to file (Mandatory)
+    type: "python"                   # File type (Mandatory)
+    version: "1.0.0"                 # File version
+    status: "active"                 # File status: active/legacy/deprecated
+    critical: true                   # Whether the file is critical for operation
+
+    # Additional Metadata for AI Assistance
+    ai_hint: "Main application entrypoint"  # Short hint describing the file's role
+    tags: ["core", "entrypoint"]      # Tags categorizing the file
+
+    # Dependencies and Relations
+    depends_on:
+      hard: ["src/utils.py"]          # Required dependencies (hard-linked)
+      soft: ["docs/readme.md"]        # Soft references (non-mandatory)
+    circular: false                   # Flag preventing cyclic dependencies
+
+    # Security Settings
+    security:
+      level: "high"                   # Security level: critical/high/medium/low
+      standards: ["OWASP ASVS"]       # Compliance standards
+      threat_model:                   # Risk and mitigation measures
+        - risk: "Data Leakage"
+          mitigation: "Encryption"
+
+    # Performance Metrics
+    performance:
+      avg_execution_time: "250ms"    # Average execution time
+      bottlenecks: ["process_data()"] # Areas slowing down performance
+
+    # Semantic Details (Optional)
+    semantic_hints:
+      algorithms:
+        - name: "binary_search"       # Algorithm details
+          complexity: "O(log n)"      # Complexity class
+      tech_debt:
+        - location: "lines 100-120"   # Technical debt information
+          reason: "Unoptimized loop structure"
+
+context_groups:
+  auth_flow:                         # Named context group
+    name: "Authentication Workflow"  # Human-readable name
+    files: ["src/auth/login.py"]      # Associated files
+    shared_context:                   # Shared properties
+      security_level: "high"          # Consistent security level
+
+templates:
+  db_model:                          # Template definition
+    ai_hint: "SQLAlchemy Database Model"  # Helpful annotation
+    links: ["docs/models.md"]         # Related documents
+
+env_mapping:                         # Environment variable mapping
+  database_url:
+    dev: "postgresql://localhost:5432/dev_db"  # Development environment setting
+    prod: "postgresql://production-server:5432/production_db"  # Production environment setting 

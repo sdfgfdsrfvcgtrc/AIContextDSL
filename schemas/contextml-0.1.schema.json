@@ -1,0 +1,154 @@
+{
+  "$id": "https://example.com/contextml-1.1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ContextML 0.1 Schema",
+  "description": "Schema for ContextML configuration files.",
+  "type": "object",
+  "properties": {
+    "project": {
+      "type": "object",
+      "required": ["name", "version"],
+      "properties": {
+        "name": {"type": "string"},
+        "version": {"type": "string", "pattern": "^\\d+(\\.\\d+)*$"},
+        "context_strategy": {
+          "type": "object",
+          "properties": {
+            "max_files": {"type": "integer"},
+            "priority": {"type": "array"}
+          }
+        },
+        "dependencies": {
+          "type": "object",
+          "properties": {
+            "python": {"type": "string"},
+            "nodejs": {"type": "string"},
+            "libraries": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {"type": "string"},
+                  "version": {"type": "string"},
+                  "stability": {"enum": ["prod", "test", "dev"]},
+                  "update_policy": {"enum": ["patch", "minor", "major", "none"]}
+                }
+              }
+            }
+          }
+        },
+        "global": {
+          "type": "object",
+          "properties": {
+            "encoding": {"type": "string"},
+            "line_endings": {"enum": ["win", "unix", "mac"]}
+          }
+        }
+      }
+    },
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "type"],
+        "properties": {
+          "path": {"type": "string"},
+          "type": {"type": "string"},
+          "version": {"type": "string", "pattern": "^\\d+(\\.\\d+)*$"},
+          "status": {"type": "string"},
+          "critical": {"type": "boolean"},
+          "ai_hint": {"type": "string"},
+          "tags": {"type": "array", "items": {"type": "string"}},
+          "depends_on": {
+            "type": "object",
+            "properties": {
+              "hard": {"type": "array", "items": {"type": "string"}},
+              "soft": {"type": "array", "items": {"type": "string"}}
+            }
+          },
+          "circular": {"type": "boolean"},
+          "security": {
+            "type": "object",
+            "properties": {
+              "level": {"enum": ["critical", "high", "medium", "low"]},
+              "standards": {"type": "array", "items": {"type": "string"}},
+              "threat_model": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "risk": {"type": "string"},
+                    "mitigation": {"type": "string"}
+                  }
+                }
+              }
+            }
+          },
+          "performance": {
+            "type": "object",
+            "properties": {
+              "avg_execution_time": {"type": "string"},
+              "bottlenecks": {"type": "array", "items": {"type": "string"}}
+            }
+          },
+          "semantic_hints": {
+            "type": "object",
+            "properties": {
+              "algorithms": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {"type": "string"},
+                    "complexity": {"type": "string"}
+                  }
+                }
+              },
+              "tech_debt": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "location": {"type": "string"},
+                    "reason": {"type": "string"}
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "context_groups": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "name": {"type": "string"},
+          "files": {"type": "array", "items": {"type": "string"}},
+          "shared_context": {"type": "object"}
+        }
+      }
+    },
+    "templates": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "ai_hint": {"type": "string"},
+          "links": {"type": "array", "items": {"type": "string"}}
+        }
+      }
+    },
+    "env_mapping": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "dev": {"type": "string"},
+          "prod": {"type": "string"}
+        }
+      }
+    }
+  }
+}
