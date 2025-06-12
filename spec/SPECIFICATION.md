@@ -114,13 +114,48 @@ Syntax:
 ```
 ### Language	Syntax
 ```
-Python	# contextml:
-JavaScript	// contextml:
-Markdown	<!-- contextml:
-Java	/* contextml:
+* Python: # contextml:
+* JavaScript: // contextml:
+* Markdown: <!-- contextml: -->
+* Java: /* contextml: */
+* TypeScript: // contextml:
+* YAML: # contextml:
+* JSON: // contextml:
+* TOML: # contextml:
+* XML: <!-- contextml: -->
+* HTML/CSS: <!-- contextml: -->
+* Jupyter Notebooks: # contextml:
+* Shell scripts: # contextml:
+* SQL queries: -- contextml:
+* Dockerfiles: # contextml:
+* Text documents: # contextml:
+* GraphQL schemas: # contextml:
+* Protocol buffers: // contextml:
+* R scripts: # contextml:
+* Package lock files: // contextml:
+* C++ source code: // contextml:
+* Rust programs: // contextml:
+* Go applications: // contextml:
+* Kotlin classes: // contextml:
+* Swift projects: // contextml:
+* Binary data: # contextml:
+* Comma-separated values: # contextml:
+* INI configurations: ; contextml:
+* General configuration files: # contextml:
 ```
 ## Validation Rules
 * All referenced paths in depends_on must exist.
 * The version field must conform to SemVer rules.
 * Critical files cannot depend on deprecated modules.
 * Cyclic dependencies are forbidden.
+
+## Cycle Dependency Check
+The system is required to monitor the presence of cyclic dependencies between files and prevent their creation. If a cyclic dependency is detected, an error message should be displayed.
+
+## Non-Critical Module Control
+If a critical file depends on an outdated component (module), the system must issue a warning or error indicating the need to update dependencies. It is recommended to regularly check the version of dependencies and promptly update components to the current version.
+
+## Support for International Encoding Standards
+The project must support different international file encoding standards such as UTF-8 and UTF-16. Developers can choose the appropriate encoding standard for their specific project by specifying it in the configuration file (project.ctml).
+
+The recommended default encoding format is UTF-8 because it is widely used and compatible with most modern platforms and services.

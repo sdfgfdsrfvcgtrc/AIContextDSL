@@ -29,7 +29,7 @@
                 "type": "object",
                 "properties": {
                   "name": {"type": "string"},
-                  "version": {"type": "string"},
+                  "version": {"type": "string", "pattern": "^v?(?:\\d+)(?:\\.\\d+){0,2}(?:-(?:\\w+))?$"},
                   "stability": {"enum": ["prod", "test", "dev"]},
                   "update_policy": {"enum": ["patch", "minor", "major", "none"]}
                 }
@@ -40,7 +40,10 @@
         "global": {
           "type": "object",
           "properties": {
-            "encoding": {"type": "string"},
+            "encoding": {
+              "type": "string",
+              "enum": ["utf-8", "utf-16"]
+           },
             "line_endings": {"enum": ["win", "unix", "mac"]}
           }
         }
@@ -53,7 +56,36 @@
         "required": ["path", "type"],
         "properties": {
           "path": {"type": "string"},
-          "type": {"type": "string"},
+          "type": {"type": "string",
+          "enum": [
+             "python",
+             "javascript",
+             "typescript",
+             "markdown",
+             "yaml",
+             "json",
+             "toml",
+             "xml",
+             "htmlcss",
+             "jupyter",
+             "shell",
+             "sql",
+             "dockerfile",
+             "txt",
+             "graphql",
+             "protobuf",
+             "r",
+             "lock",
+             "cpp",
+             "rust",
+             "go",
+             "kotlin",
+             "swift",
+             "binary",
+             "csv",
+             "ini",
+             "config"
+                   ]},
           "version": {"type": "string", "pattern": "^\\d+(\\.\\d+)*$"},
           "status": {"type": "string"},
           "critical": {"type": "boolean"},
@@ -87,7 +119,7 @@
           "performance": {
             "type": "object",
             "properties": {
-              "avg_execution_time": {"type": "string"},
+              "avg_execution_time": {"type": "string", "pattern": "\\d+(ms|s)"},
               "bottlenecks": {"type": "array", "items": {"type": "string"}}
             }
           },
@@ -149,6 +181,36 @@
           "prod": {"type": "string"}
         }
       }
+    },
+    "annotations": {
+        "type": "object",
+        "properties": {
+            "manual": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "id": {"type": "string"},
+                        "hint": {"type": "string"},
+                        "tags": {"type": "array", "items": {"type": "string"}}
+                    },
+                    "required": ["id", "hint"]
+                }
+            },
+            "automatic": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "id": {"type": "string"},
+                        "hint": {"type": "string"},
+                        "source": {"type": "string"}
+                    },
+                    "required": ["id", "hint", "source"]
+                }
+            }
+        },
+        "additionalProperties": false
     }
   }
 }
