@@ -1,7 +1,7 @@
-# ContextML
+# AIContext DSL (Domain-Specific Language)
 ## Context Binding Language for AI systems
 
-**ContextML** is a YAML-compatible markup language for passing structured context between developers and AI tools. The files use the `.ctml' extension.
+**AIContext DSL** is a YAML-compatible markup language for passing structured context between developers and AI tools. The files use the `.ctml' extension.
 
 ## Project Master File (project.ctml):
 * Contains a map of all entities (files, libraries, modules, tasks, documents)
@@ -20,4 +20,4 @@
 Modifications to the official specification are possible exclusively by the project owner. Community members can propose changes and improvements to the project implementation through the pull-request submission procedure.
 
 ## Conclusion
-The ContextML project is available to a wide range of developers and researchers. The author welcomes feedback and invites interested parties to discuss further evolution of the project. The author can be contacted by e-mail: zhelannikov.n.a@gmail.com.
+The AIContext DSL project is available to a wide range of developers and researchers. The author welcomes feedback and invites interested parties to discuss further evolution of the project. The author can be contacted by e-mail: zhelannikov.n.a@gmail.com.

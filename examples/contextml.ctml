@@ -1,4 +1,4 @@
-# contextml: Full Example Configuration
+# aicontextdsl: Full Example Configuration
 
 project:
   name: "My Awesome Project"          # Mandatory: Name of the project

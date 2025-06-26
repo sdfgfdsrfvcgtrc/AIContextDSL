@@ -1,9 +1,23 @@
-# ContextML Specification v0.1
+# AIContext DSL (Domain-Specific Language) Specification v0.2
 
-## Context Binding Language for AI Systems
+## Context Binding Language for AI Systems.A standard for structured annotations created specifically for AI assistants.
 
 ## Purpose
 A unified standard for transferring context to AI tools in development.
+
+AIContext DSL combines three concepts:
+
+1. **`@` Annotation Standard**  
+Familiar to developers from Javadoc/TSDoc ecosystems
+
+2. **YAML Flexibility**  
+Supports complex nested structures unlike flat key-value pairs
+
+3. **In-Code Embedding**  
+Works within comments of any programming language
+
+This trifecta enables what no other solution offers:  
+**Structured, language-agnostic, AI-optimized metadata
 
 ## Format
 YAML-compatible syntax, .ctml files.
@@ -82,6 +96,7 @@ files:
         - location: "lines 45-60"
           reason: "Outdated AES-128 algorithm"
 ```
+
 ## Advanced Features
 ### Grouping Context
 ```
@@ -108,34 +123,34 @@ env_mapping:
 
 ### Language	Syntax
 ```
-* Python: # contextml:
-* JavaScript: // contextml:
-* Markdown: <!-- contextml: -->
-* Java: /* contextml: */
-* TypeScript: // contextml:
-* YAML: # contextml:
-* JSON: // contextml:
-* TOML: # contextml:
-* XML: <!-- contextml: -->
-* HTML/CSS: <!-- contextml: -->
-* Jupyter Notebooks: # contextml:
-* Shell scripts: # contextml:
-* SQL queries: -- contextml:
-* Dockerfiles: # contextml:
-* Text documents: # contextml:
-* GraphQL schemas: # contextml:
-* Protocol buffers: // contextml:
-* R scripts: # contextml:
-* Package lock files: // contextml:
-* C++ source code: // contextml:
-* Rust programs: // contextml:
-* Go applications: // contextml:
-* Kotlin classes: // contextml:
-* Swift projects: // contextml:
-* Binary data: # contextml:
-* Comma-separated values: # contextml:
-* INI configurations: ; contextml:
-* General configuration files: # contextml:
+* Python: # @aicontextdsl { }
+* JavaScript: // @aicontextdsl { }
+* Markdown: <!-- @aicontextdsl { } -->
+* Java: /* @aicontextdsl { } */
+* TypeScript: // @aicontextdsl { }
+* YAML: # @aicontextdsl { }
+* JSON: // @aicontextdsl { }
+* TOML: # @aicontextdsl { }
+* XML: <!-- @aicontextdsl { } -->
+* HTML/CSS: <!-- @aicontextdsl { } -->
+* Jupyter Notebooks: # @aicontextdsl { }
+* Shell scripts: # @aicontextdsl { }
+* SQL queries: -- @aicontextdsl { }
+* Dockerfiles: # @aicontextdsl { }
+* Text documents: # @aicontextdsl { }
+* GraphQL schemas: # @aicontextdsl { }
+* Protocol buffers: // @aicontextdsl { }
+* R scripts: # @aicontextdsl:
+* Package lock files: // @aicontextdsl { }
+* C++ source code: // @aicontextdsl { }
+* Rust programs: // @aicontextdsl { }
+* Go applications: // @aicontextdsl { }
+* Kotlin classes: // @aicontextdsl { }
+* Swift projects: // @aicontextdsl { }
+* Binary data: # @aicontextdsl { }
+* Comma-separated values: # @aicontextdsl { }
+* INI configurations: ; @aicontextdsl { }
+* General configuration files: # @aicontextdsl { }
 ```
 ## Validation Rules
 * All referenced paths in depends_on must exist.
@@ -155,8 +170,177 @@ The project must support different international file encoding standards such as
 The recommended default encoding format is UTF-8 because it is widely used and compatible with most modern platforms and services.
 
 ```
+
+## Extension System and Customization
+
+AIContext DSL supports two types of extensions to adapt to various domains and project needs:
+
+### 1. Domain-Specific Extensions
+**Purpose**: Create specialized annotations for specific domains:
+- Finance (banking operations, accounting)
+- Scientific computing (physics, chemistry, bioinformatics)
+- Healthcare (HL7, DICOM standards)
+- Game development (game logic, engine physics)
+
+**Implementation**:
+1. Create extension files with `.ctml` extension (e.g., `finance.ctml`)
+2. Declare them in the main `project.ctml` file:
+```
+project:
+  extensions: ["finance.ctml", "bioinformatics.ctml"]
+```
+### Financial extension example (finance.ctml)
+```
+# Financial domain extension
+name: "Financial Domain Extension"
+version: "1.2"
+
+# Specialized tags
+tags:
+  - "transaction"
+  - "compliance"
+  - "audit_trail"
+
+# Custom annotation blocks
+custom_blocks:
+  financial_entity:
+    description: "Financial entity description"
+    fields:
+      entity_type: 
+        type: "string"
+        enum: ["asset", "liability", "equity"]
+      currency: "ISO 4217 code"
+      amount: "decimal"
+
+# Operation templates
+templates:
+  money_transfer:
+    intent: "Funds transfer between accounts"
+    error_cases:
+      - "Insufficient balance"
+      - "Invalid recipient account"
+```
+
+### Scientific extension example (chemistry.ctml):
+```
+# Chemistry calculations extension
+name: "Chemistry Extension"
+version: "0.9"
+
+custom_blocks:
+  chemical_reaction:
+    description: "Chemical reaction description"
+    fields:
+      reactants: "array<compound>"
+      products: "array<compound>"
+      conditions:
+        temperature: "kelvin"
+        pressure: "atm"
+        catalyst: "string"
+
+# Specialized data types
+data_types:
+  compound:
+    structure:
+      formula: "string"
+      molar_mass: "g/mol"
+      state: ["solid", "liquid", "gas"]
+```
+### Custom Extensions (Open Schema)
+Principle: AIContext DSL follows an "open schema" model where:
+* Core specification is strictly defined
+* Implementations can add arbitrary elements
+Core Requirements (immutable)
+Every annotation MUST include:
+* Root tag @aicontextdsl
+* id field (string)
+* version field (string)
+```
+# Minimal valid annotation
+@aicontextdsl {
+  id: "required-field"
+  version: "1.0"
+}
+```
+### Extensible Areas
+Users MAY add:
+* Custom top-level blocks:
+```
+@aicontextdsl {
+  # Standard blocks
+  @manual: {...}
+  
+  # Custom block
+  deployment_settings: {
+    region: "eu-west-1"
+    replicas: 3
+  }
+}
+```
+* Additional fields in existing blocks:
+```
+@aicontextdsl {
+  @manual {
+    # Standard fields
+    id: "auth"
+    
+    # Custom field
+    compliance_standard: "PCI DSS 4.0"
+  }
+}
+```
+* Arbitrary values (where type isn't constrained):
+```
+@aicontextdsl {
+  @ai_config {
+    # Custom parameter
+    custom_threshold: 0.85
+  }
+}
+```
+### Best Practices for Extensions
+* Prefix custom fields:
+```
+# Recommended approach
+x-audit-trail: true
+org-custom-param: "value"
+```
+* Document extensions:
+Create aicontext-extensions.md in project root
+Describe all custom elements:
+```
+## Financial Extensions
+**compliance_standard** (in @manual block)
+- Type: string
+- Description: Compliance with financial standards
+- Valid values: PCI DSS, GDPR, SOX
+```
+* Avoid conflicts:
+Don't use reserved names (id, version, source)
+Monitor changes in core specification
+
+### Limitations and Prohibitions
+* Base syntax is immutable:
+```
+# INVALID: Changing @ symbol
+$aicontextdsl { ... }  # Error!
+```
+* Core field types are fixed:
+```
+# INVALID: Changing id type
+@aicontextdsl {
+  id: 123  # Must be string!
+}
+```
+* Block hierarchy is preserved:
+```
+# INVALID: @manual outside @aicontextdsl
+@manual { ... }  # Error!
+```
+
+
 ## In-File Annotations
-An important feature of ContextML is its ability to add internal annotations directly inside individual files. These annotations provide additional metadata that helps both developers and automated systems understand the purpose, structure, and relationships within the project.
+An important feature of AIContext DSL is its ability to add internal annotations directly inside individual files. These annotations provide additional metadata that helps both developers and automated systems understand the purpose, structure, and relationships within the project.
 Annotations come in two forms: manual and automatic.
 
 ### Manual Annotations
@@ -165,56 +349,222 @@ Manual annotations are created explicitly by developers themselves. They represe
 * Highlight key functionalities or risks associated with certain sections of the code.
 * Tag files or parts of them into categories for easier filtering.
 
-Example:
+**Basic Syntax:**
 ```
-# contextml-manual:
-#   id: "auth-flow-annotation"
-#   hint: "JWT Authentication flow implementation"
-#   tags: ["security", "authentication"]
+# @aicontextdsl {
+#   @manual {
+#     id: "auth-flow-annotation"
+#     hint: "JWT authentication flow implementation"
+#     tags: ["security", "authentication"]
+#   }
+# }
 ```
 Each annotation includes:
-* ID: Unique identifier.
-* Hint: Human-readable description of the annotation’s intent.
-* Tags: List of categorization labels applied to the annotated section.
-
+* id: Unique identifier.
+* hint: Human-readable description of the annotation’s intent.
+* tags: List of categorization labels applied to the annotated section.
+### Advanced Blocks for Manual Annotations
+### @intent - Purpose and Goals
+Block for explicitly describing objectives and business logic:
+**Basic Syntax:**
+```
+# @aicontextdsl {
+#   @manual {
+#     @intent {
+#       purpose: "User authentication via JWT"
+#       business_value: "Secure system access"
+#       expected_behavior: "Token generation with valid credentials"
+#       dependencies: ["user_db", "redis_session"]
+#       version: "2.3"
+#       author: "security_team@company.com"
+#       last_updated: "2025-03-15"
+#       compliance: ["GDPR", "ISO27001"]
+#       performance: "high"
+#       test_coverage: "85%"
+#     }
+#   }
+# }
+```
+### @error_cases - Error Handling
+Block for describing potential error scenarios:
+**Basic Syntax:**
+```
+# @aicontextdsl {
+#   @manual {
+#     @error_cases {
+#       invalid_credentials: "Incorrect username or password"
+#       token_expired: "Token has expired"
+#       db_failure: "Database connection error"
+#       rate_limit: "Request limit exceeded"
+#       insecure_connection: "HTTPS connection required"
+#       invalid_token_format: "Malformed token"
+#       missing_scope: "Insufficient permissions"
+#       brute_force_attempt: "Detected brute force attack"
+#       user_inactive: "Account inactive"
+#       system_time_skew: "Server time mismatch"
+#     }
+#   }
+# }
+```
 ### Automatic Annotations
 Automatic annotations are generated programmatically by parsers or other tools based on analysis of the file contents. They help supplement information automatically without requiring explicit developer intervention but may not always reflect accurate user intentions fully.
 
-Examples might include:
-* Detection of potential performance issues.
-* Identification of unused imports or obsolete functionality.
+Common use cases:
+* Detecting performance bottlenecks
+* Identifying unused imports
+* Flagging obsolete functionality
 
-They follow the same basic structure as manual annotations but typically have additional fields like source, which indicates where they originated from (e.g., a linter or analyzer tool).
 
-Example:
+**Basic Syntax:**
 ```
-# contextml-automatic:
-#   id: "perf-bottleneck-123"
-#   hint: "Potential slowdown due to nested loops."
-#   source: "PerformanceAnalyzer-v2.1"
+# @aicontextdsl {
+#   @automatic {
+#     id: "perf-bottleneck-123"
+#     hint: "Potential slowdown due to nested loops"
+#     source: "PerformanceAnalyzer-v2.1"
+#     confidence: 0.92
+#     severity: "medium"
+#   }
+# }
 ```
+Additional fields:
+* Source: Generating tool (linter, analyzer)
+* Confidence: Certainty level (0.0-1.0)
+* Severity: Impact level (low/medium/high)
+
+### @ai_config Block - AI Configuration
+Global settings for AI assistant interactions:
+**Basic Syntax:**
+```
+# @aicontextdsl {
+#   @ai_config {
+#     token_optimization: "aggressive"
+#     context_strategy: "prioritized"
+#     focus: ["security", "error_handling"]
+#     ignore: ["deprecated", "legacy"]
+#     model: "gpt-4-turbo"
+#     max_context_tokens: 12000
+#     temperature: 0.3
+#     response_format: "code_only"
+#     allow_inline_comments: false
+#     strict_validation: true
+#   }
+# }
+```
+
 ### Difference Between Manual and Automatic Annotations
 
 * Priority: Manual annotations always override automatic ones when conflicts arise.
 * Editable: Only manual annotations can be edited freely by developers. Automated annotations will only change through re-analysis unless specifically modified manually.
 * Usage Scenarios: Use manual annotations for critical contexts or essential points you want highlighted. Use automatic annotations for general insights derived by tools during static analysis.
 
-### Example Combining Both Annotation Types
-Here’s an example combining both kinds of annotations in one file, where automatic annotations appear first, followed by manual annotations:
+### Combined Annotation Example
 
-Example:
+**Basic Syntax:**
 ```
-# contextml-automatic:
-#   id: "unused-import-warning"
-#   hint: "Unused import 'os' found."
-#   source: "LinterTool-v1.5"
-
-# contextml-manual:
-#   id: "auth-flow-annotation"
-#   hint: "JWT Authentication flow implementation"
-#   tags: ["security", "authentication"]
+# @aicontextdsl {
+#   @manual {
+#     id: "auth-flow-annotation"
+#     hint: "JWT Authentication flow implementation"
+#     tags: ["security", "authentication"]
+    
+#     @intent {
+#       purpose: "Аутентификация пользователя через JWT",
+#       business_value: "Обеспечение безопасного доступа к системе",
+#       expected_behavior: "Генерация токена при валидных учетных данных",
+#       dependencies: ["user_db", "redis_session"],
+#       version: "2.3",
+#       author: "security_team@company.com",
+#       last_updated: "2025-03-15",
+#       compliance: ["GDPR", "ISO27001"],
+#       performance: "high",
+#       test_coverage: "85%"
+#     }
+    
+#     @error_cases {
+#       invalid_credentials: "Неверный логин или пароль",
+#       token_expired: "Срок действия токена истек",
+#       db_failure: "Ошибка подключения к базе данных",
+#       rate_limit: "Превышено количество попыток",
+#       insecure_connection: "Попытка подключения без HTTPS",
+#       invalid_token_format: "Некорректный формат токена",
+#       missing_scope: "Недостаточно прав доступа",
+#       brute_force_attempt: "Обнаружена атака перебором",
+#       user_inactive: "Учетная запись неактивна",
+#       system_time_skew: "Расхождение времени сервера"
+#     }
+#   }
+  
+#   @automatic {
+#     id: "perf-issue-7f3a",
+#     hint: "Potential slowdown due to nested loops",
+#     source: "PerformanceAnalyzer v3.1",
+#     confidence: 0.92,
+#     severity: "medium",
+#     detected_issue: "Отсутствует кеширование проверки токена",
+#     suggested_fix: "Добавить кеширование в Redis на 5 минут",
+#     impact: "Увеличивает нагрузку на БД на 40%",
+#     priority: "P2",
+#     tags: ["performance", "optimization"]
+#   }
+  
+#   @ai_config {
+#     token_optimization: "aggressive",
+#     context_strategy: "prioritized",
+#     focus: ["security", "error_handling"],
+#     ignore: ["deprecated", "legacy"],
+#     model: "gpt-4-turbo",
+#     max_context_tokens: 12000,
+#     temperature: 0.3,
+#     response_format: "code_only",
+#     allow_inline_comments: false,
+#     strict_validation: true
+#   }
+# }
 ```
-### Recommendation
-Developers should primarily rely on manual annotations for high-level guidance, whereas automatic annotations complement these efforts by providing deeper insights into less obvious patterns.
+### Recommendations
+* For critical logic:
+  * Always use manual annotations with @intent and @error_cases blocks
+  * Explicitly state security requirements in @intent
+  * Regularly update annotations when code changes
+* For automatic annotations:
+  * Set retention policies (e.g., auto-delete after 30 days)
+  * Filter by confidence level (e.g., confidence > 0.8)
+  * Combine with manual annotations for comprehensive coverage
+* AI optimization:
+  * Use @ai_config to manage context size
+  * Prioritize important topics through focus
+  * Exclude irrelevant sections via ignore
+  * Experiment with temperature for creativity/accuracy balance
+* Best practices:
+  * Start with basic annotations (id, hint, tags)
+  * Gradually add specialized blocks
+  * Maintain consistent tagging conventions
+  * Review annotations during code reviews
+  * Integrate annotation generation into CI/CD pipelines
 
+Developers should primarily rely on manual annotations for high-level guidance, while automatic annotations complement these by providing deeper insights into less obvious patterns.
 
+## Annotation Processing for AI Context
+While the human-readable YAML-like syntax is optimal for developer experience, it consumes excessive tokens when sent directly to AI models. To optimize token usage while preserving semantic richness, AIContext DSL includes an automatic transformation process.
+
+### The Token Optimization Challenge
+1. **Problem**: Raw annotation format contains redundant elements:
+   - Comment symbols (`#`)
+   - Formatting whitespace
+   - Repeated keywords
+   - Structural syntax characters (`{`, `}`, `:`)
+   
+2. **Impact**: 
+   - 40-60% token overhead in raw format
+   - Reduced effective context window for AI
+   - Higher costs for large codebases
+
+### Solution: Context Compression Pipeline
+```mermaid
+graph LR
+A[Source Code] --> B[Annotation Extraction]
+B --> C[Semantic Normalization]
+C --> D[JSON Transformation]
+D --> E[Token-Optimized Payload]
+E --> F[AI Model]

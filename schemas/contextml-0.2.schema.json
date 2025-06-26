@@ -1,8 +1,8 @@
 {
-  "$id": "https://example.com/contextml-0.1.schema.json",
+  "$id": "https://github.com/sdfgfdsrfvcgtrc/AIContextDSL/blob/master/schemas/contextml-0.2.schema.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "ContextML 0.1 Schema",
-  "description": "Schema for ContextML configuration files.",
+  "title": "AIContext DSL 0.2 Schema",
+  "description": "Schema for AIContext DSL configuration files.",
   "type": "object",
   "properties": {
     "project": {
