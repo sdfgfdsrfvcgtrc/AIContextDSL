@@ -1,6 +1,6 @@
-# AIContext DSL (Domain-Specific Language) Specification v0.2
+# AI Context DSL (Domain-Specific Language) Specification v0.2
 
-## Context Binding Language for AI Systems.A standard for structured annotations created specifically for AI assistants.
+## YAML-based DSL for AI-powered development: annotations, context binding, and code generation. Supports Python, JS, Rust, and other languages
 
 ## Purpose
 A unified standard for transferring context to AI tools in development.

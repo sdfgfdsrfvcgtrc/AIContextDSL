@@ -1,5 +1,8 @@
-# AIContext DSL (Domain-Specific Language)  
-## Context Binding Language for AI Systems  
+# AI Context DSL (Domain-Specific Language)  
+## YAML-based DSL for AI-powered development: annotations, context binding, and code generation. Supports Python, JS, Rust, and other languages
+
+## Keywords  
+AI context binding, Domain-Specific Language, Code generation from annotations, Structured metadata for AI, Cross-language DSL
 
 **AIContext DSL** is a YAML-compatible markup language for transferring structured context between developers and AI tools. Files use the `.ctml` extension.  
 
