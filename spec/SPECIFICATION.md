@@ -568,3 +568,194 @@ B --> C[Semantic Normalization]
 C --> D[JSON Transformation]
 D --> E[Token-Optimized Payload]
 E --> F[AI Model]
+```
+## Code Generation via Hybrid Files
+### Hybrid File Features
+Key Differentiators:
+* Unified Structure:
+```
+# YAML metadata
+@aicontextdsl:
+  @codegen:
+    id: "optimized-quicksort"
+    target: ["rust", "go", "typescript"]
+
+# Optional implementation block
+
+implementation: |
+  def partition(arr, low, high):
+      # Reference implementation
+```
+* Advantages:
+  * Single-file representation of semantics and implementation
+  * Template support for repetitive tasks
+  * Multi-language generation from one source
+  * Clear separation between intent and execution
+
+### Purpose:
+* Creating cross-language libraries
+* Rapid algorithm prototyping
+* Core system documentation
+* Comparative implementation testing
+
+### The @codegen Block
+Required Fields:
+```
+@codegen:
+  id: unique_id        # Component identifier
+  target: [lang1, ...] # Target languages
+  intent: "Description" # Semantic purpose
+```
+Core Parameters:
+```
+params:                # Function parameters
+  - name: "arr"
+    type: "list"
+    generic: true      # Enable type inference
+
+logic:                 # Language-agnostic logic
+  - step: "Partitioning"
+    condition: "low < high"
+    loop: 
+      type: "while"
+      condition: "i <= j"
+
+optimizations:         # Performance optimizations
+  - name: "Median-of-Three"
+    impact: "Prevents O(n²) degradation"
+
+lang_specific:         # Language adaptations
+  rust:
+    slice_semantics: true  # Auto-convert to slices
+  go:
+    concurrency: "goroutines"
+```
+###  Example: Hybrid File quicksort.ctml
+```
+# @aicontextdsl
+@codegen:
+  id: "optimized-quicksort"
+  target: ["rust", "go", "typescript"]
+  intent: "Unstable in-place Hoare partition scheme"
+  
+  params:
+    - name: "arr"
+      type: "list"
+      generic: true     # Enable automatic type inference
+    - name: "low"
+      type: "int"
+      default: 0
+    - name: "high"
+      type: "int"
+      default: "len(arr)-1"
+  
+  logic:
+    - step: "Base case"
+      condition: "low < high"
+    - step: "Pivot selection"
+      method: "median_of_three(arr, low, high)"
+    - step: "Partitioning"
+      vars: ["i = low + 1", "j = high"]
+      loop:
+        type: "while"
+        condition: "i <= j"
+        body:
+          - "if arr[i] <= pivot: i++"
+          - "elif arr[j] > pivot: j--"
+          - "else: swap(arr[i], arr[j])"
+    - step: "Pivot swap"
+      action: "swap(arr[low], arr[j])"
+    - step: "Recursive calls"
+      calls:
+        - "quicksort(arr, low, j-1)"
+        - "quicksort(arr, j+1, high)"
+  
+  optimizations:
+    - name: "Tail recursion optimization"
+      applied: true
+  
+  lang_specific:
+    rust:
+      generics: "T: Ord + Copy"
+    typescript:
+      type: "Array<number>"
+```
+### Generated Code with Paradigm Adaptation
+Rust (Automatic Slices + Generics):
+```
+// contextml-start:optimized-quicksort
+fn quicksort<T: Ord + Copy>(arr: &mut [T]) {
+    if arr.len() <= 1 { return }
+    
+    let pivot_idx = median_of_three(arr);
+    arr.swap(0, pivot_idx);
+    let pivot = arr[0];
+    
+    let mut i = 1;
+    let mut j = arr.len() - 1;
+    while i <= j {
+        if arr[i] <= pivot { i += 1 } 
+        else if arr[j] > pivot { j -= 1 }
+        else { arr.swap(i, j) }
+    }
+    
+    arr.swap(0, j);
+    
+    quicksort(&mut arr[..j]);
+    quicksort(&mut arr[j+1..]);
+}
+// contextml-end
+```
+Go (Goroutines + Slices):
+```
+// contextml-start:optimized-quicksort
+func quicksort(arr []interface{}) {
+    if len(arr) <= 1 { return }
+    
+    pivotIdx := medianOfThree(arr)
+    arr[0], arr[pivotIdx] = arr[pivotIdx], arr[0]
+    pivot := arr[0]
+    
+    i, j := 1, len(arr)-1
+    for i <= j {
+        if compare(arr[i], pivot) <= 0 { i++ 
+        } else if compare(arr[j], pivot) > 0 { j-- 
+        } else { arr[i], arr[j] = arr[j], arr[i] }
+    }
+    
+    arr[0], arr[j] = arr[j], arr[0]
+    
+    // Parallel execution
+    var wg sync.WaitGroup
+    wg.Add(2)
+    go func() { quicksort(arr[:j]); wg.Done() }()
+    go func() { quicksort(arr[j+1:]); wg.Done() }()
+    wg.Wait()
+}
+// contextml-end
+```
+TypeScript (Generics + Iterators):
+```
+// contextml-start:optimized-quicksort
+function quicksort<T>(arr: T[], low: number = 0, high: number = arr.length-1): void {
+    if (low < high) {
+        const pivotIdx = medianOfThree(arr, low, high);
+        [arr[low], arr[pivotIdx]] = [arr[pivotIdx], arr[low]];
+        const pivot = arr[low];
+        
+        let i = low + 1;
+        let j = high;
+        while (i <= j) {
+            if (arr[i] <= pivot) i++;
+            else if (arr[j] > pivot) j--;
+            else [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        
+        [arr[low], arr[j]] = [arr[j], arr[low]];
+        
+        quicksort(arr, low, j-1);
+        quicksort(arr, j+1, high);
+    }
+}
+// contextml-end
+```
